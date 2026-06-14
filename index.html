@@ -101,18 +101,17 @@ body {
 .gem.big { width: 11px; height: 11px; }
 
 /* ── SLIKA JOVANA ── */
-/* ── SLIKA JOVANA ── */
 .hero-img {
-  width: 280px;      /* Fiksirana veća širina */
-  height: 280px;     /* Fiksirana veća visina */
-  max-width: 80vw;   /* Da se ne preliva na malim telefonima */
-  max-height: 80vw;
-  border-radius: 50%;
+  width: 300px;           /* Povećana širina */
+  height: 300px;          /* Povećana visina */
+  max-width: 85vw;        /* Prilagodljivost za mobilne */
+  max-height: 85vw;
+  border-radius: 25px;    /* Zaobljeni uglovi umesto kruga */
   object-fit: cover;
   object-position: top center;
-  border: 5px solid var(--gold); /* Deblji okvir */
-  box-shadow: 0 0 80px rgba(201, 168, 76, 0.6); /* Veći i jači sjaj */
-  margin-bottom: 40px; /* Više prostora ispod slike */
+  border: 4px solid var(--gold); /* Zlatni okvir */
+  box-shadow: 0 0 60px rgba(201, 168, 76, 0.4); /* Sjaj prati oblik */
+  margin-bottom: 40px;
   opacity: 0;
   animation: up .9s ease forwards .85s;
 }
