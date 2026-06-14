@@ -100,6 +100,19 @@ body {
 }
 .gem.big { width: 11px; height: 11px; }
 
+/* ── SLIKA JOVANA ── */
+.hero-img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--gold);
+  box-shadow: 0 0 25px rgba(201, 168, 76, 0.35);
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: up .9s ease forwards .85s;
+}
+
 .invite-label {
   font-size: 10px;
   letter-spacing: .4em;
@@ -298,7 +311,7 @@ body {
   height: 160px;
   display: block;
   border: none;
-  pointer-events: none; /* Sprečava da mapa "krade" skrol, klik ide na link */
+  pointer-events: none;
 }
 .map-overlay {
   position: absolute;
@@ -427,6 +440,14 @@ body {
 .send-btn:active { transform: translateY(0); }
 .send-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
 
+/* ── Dodatni tekst ispod forme ── */
+.alt-rsvp-msg {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 24px;
+}
+
 /* ── SUCCESS ── */
 .success {
   display: none;
@@ -458,6 +479,11 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(28px);
@@ -484,8 +510,9 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
 
 <canvas id="bg"></canvas>
 
+<!-- ═══════════ HERO ═══════════ -->
 <section class="hero">
-  <p class="eyebrow">11 · Juli · 2026 &nbsp;—&nbsp; Restoran Pećić</p>
+  <p class="eyebrow">11 · Jul · 2026 &nbsp;—&nbsp; Restoran Pećić</p>
 
   <div class="big-18">18</div>
 
@@ -494,6 +521,9 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
     <div class="gem big"></div>
     <div class="gem"></div>
   </div>
+
+  <!-- Tvoja slika ubačena ovde -->
+  <img src="Jovan.jpg" alt="Jovan" class="hero-img">
 
   <p class="invite-label">Poziva Vas</p>
   <h1 class="hero-name">Jovan Miloševic</h1>
@@ -526,6 +556,7 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
   </div>
 </section>
 
+<!-- ═══════════ DETAILS ═══════════ -->
 <section class="details">
   <div class="details-inner">
 
@@ -554,7 +585,7 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
       <div class="card reveal" style="transition-delay:.1s">
         <span class="card-icon">📅</span>
         <span class="card-label">Datum</span>
-        <p class="card-value">11. Juli 2026</p>
+        <p class="card-value">11. Jul 2026</p>
         <p class="card-sub">Subota uveče</p>
       </div>
 
@@ -569,23 +600,19 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
   </div>
 </section>
 
+<!-- ═══════════ RSVP ═══════════ -->
 <section class="rsvp-wrap">
   <div class="rsvp-box reveal">
 
     <h2 class="rsvp-title">Potvrdite dolazak</h2>
-    <p class="rsvp-deadline">⏳ &nbsp;Rok: 5. Juli 2026</p>
+    <p class="rsvp-deadline">⏳ &nbsp;Rok: 5. Jul 2026</p>
 
     <div id="form-wrap">
       <form id="rsvp" action="https://formspree.io/f/xpqekezb" method="POST">
 
         <div class="field">
           <label class="f-label" for="nm">Ime i prezime</label>
-          <input class="f-input" id="nm" name="ime" type="text" placeholder="npr. Marko Marković" required>
-        </div>
-
-        <div class="field">
-          <label class="f-label" for="em">Email (opciono — za potvrdu)</label>
-          <input class="f-input" id="em" name="email" type="email" placeholder="vas@email.com">
+          <input class="f-input" id="nm" name="ime" type="text" placeholder="npr. Jovan Jovanovic" required>
         </div>
 
         <div class="field">
@@ -594,9 +621,12 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
             <option value="1">Samo ja</option>
             <option value="2">Nas dvoje</option>
             <option value="3">Nas troje</option>
-            <option value="4+">Nas cetvorice ili više</option>
+            <option value="4">Nas četvoro</option>
           </select>
         </div>
+
+        <!-- OVO JE KONTEJNER GDE SE POJAVLJUJU DODATNA POLJA -->
+        <div id="dodatni-gosti"></div>
 
         <div class="field">
           <label class="f-label" for="msg">Poruka za Jovana (opciono)</label>
@@ -605,6 +635,8 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
 
         <button class="send-btn" type="submit" id="btn">Dolazim &nbsp;🥂</button>
       </form>
+
+      <p class="alt-rsvp-msg">Ako želite, možete potvrditi dolazak i porukom.</p>
     </div>
 
     <div class="success" id="ok">
@@ -617,9 +649,10 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
 </section>
 
 <footer>
-  <p>Jovan Miloševic &nbsp;·&nbsp; XVIII Rodjendan &nbsp;·&nbsp; 11. Juli 2026</p>
+  <p>Jovan Miloševic &nbsp;·&nbsp; XVIII Rodjendan &nbsp;·&nbsp; 11. Jul 2026</p>
 </footer>
 
+<!-- ═══════════ SCRIPTS ═══════════ -->
 <script>
 /* ── STARFIELD CANVAS ── */
 const cv = document.getElementById('bg');
@@ -724,6 +757,26 @@ const obs = new IntersectionObserver(
   { threshold: .12 }
 );
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ── DODATNA POLJA ZA GOSTE (DINAMIČNO) ── */
+const brSelect = document.getElementById('br');
+const dodatniGosti = document.getElementById('dodatni-gosti');
+
+brSelect.addEventListener('change', (e) => {
+  const broj = parseInt(e.target.value);
+  dodatniGosti.innerHTML = ''; // Brišemo prethodna polja svaki put kad se promeni odabir
+
+  if (broj > 1) {
+    for (let i = 2; i <= broj; i++) {
+      dodatniGosti.innerHTML += `
+        <div class="field" style="animation: fade-in-up 0.4s ease forwards;">
+          <label class="f-label" for="gost_${i}">Ime i prezime gosta ${i}</label>
+          <input class="f-input" id="gost_${i}" name="ime_gosta_${i}" type="text" placeholder="npr. Marko Marković" required>
+        </div>
+      `;
+    }
+  }
+});
 
 /* ── RSVP SUBMIT ── */
 const form = document.getElementById('rsvp');
