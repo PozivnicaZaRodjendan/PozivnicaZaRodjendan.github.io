@@ -31,6 +31,46 @@ body {
   overflow-x: hidden;
 }
 
+/* ── PRELOADER ── */
+#preloader {
+  position: fixed;
+  inset: 0;
+  background: var(--void);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease;
+}
+.pre-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 80px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  animation: pulseLogo 1.5s infinite alternate;
+}
+@keyframes pulseLogo {
+  0%   { opacity: 0.5; transform: scale(0.95); text-shadow: 0 0 10px rgba(201,168,76,0); }
+  100% { opacity: 1; transform: scale(1.05); text-shadow: 0 0 40px rgba(201,168,76,0.6); }
+}
+
+/* ── ZLATNA PRAŠINA (KURSOR) ── */
+.spark {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  box-shadow: 0 0 10px var(--gold);
+  animation: spark-fade 0.8s forwards;
+}
+@keyframes spark-fade {
+  0%   { opacity: 1; transform: scale(1) translateY(0); }
+  100% { opacity: 0; transform: scale(0) translateY(30px); }
+}
+
 /* ── CANVAS ── */
 #bg {
   position: fixed;
@@ -88,7 +128,7 @@ body {
   align-items: center;
   gap: 14px;
   justify-content: center;
-  margin: 18px 0 28px;
+  margin: 18px 0 36px;
   opacity: 0;
   animation: up .9s ease forwards .8s;
 }
@@ -101,20 +141,15 @@ body {
 .gem.big { width: 11px; height: 11px; }
 
 /* ── SLIKA JOVANA ── */
-/* ── SLIKA JOVANA - IZDUŽENI OBLIK ── */
 .hero-img {
-  width: 280px;            /* Fiksirana širina */
-  height: 400px;           /* Povećana visina za efekat izduženosti */
+  width: 280px;
+  height: 400px;
   max-width: 85vw;
-  
-  /* border-radius: gornji-levi gornji-desni donji-desni donji-levi */
-  /* Ovo pravi efekat "otvaranja" ka dole */
-  border-radius: 40px 40px 10px 10px; 
-  
+  border-radius: 40px 40px 10px 10px;
   object-fit: cover;
   object-position: top center;
   border: 4px solid var(--gold);
-  box-shadow: 0 15px 50px rgba(201, 168, 76, 0.35); /* Senka naglašava dubinu */
+  box-shadow: 0 15px 50px rgba(201, 168, 76, 0.35);
   margin-bottom: 40px;
   opacity: 0;
   animation: up .9s ease forwards .85s;
@@ -243,6 +278,7 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 2px;
   margin-bottom: 8px;
+  perspective: 1000px;
 }
 
 .cards > .card:first-child {
@@ -255,7 +291,9 @@ body {
   padding: 30px 28px;
   position: relative;
   overflow: hidden;
-  transition: border-color .3s;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.1s ease-out, border-color 0.3s;
 }
 
 .card:hover {
@@ -277,6 +315,7 @@ body {
   font-size: 22px;
   display: block;
   margin-bottom: 14px;
+  transform: translateZ(20px);
 }
 
 .card-label {
@@ -286,6 +325,7 @@ body {
   color: var(--gold);
   margin-bottom: 8px;
   display: block;
+  transform: translateZ(10px);
 }
 
 .card-value {
@@ -294,6 +334,7 @@ body {
   font-weight: 600;
   color: var(--cream);
   line-height: 1.25;
+  transform: translateZ(15px);
 }
 
 .card-sub {
@@ -301,6 +342,7 @@ body {
   color: var(--muted);
   margin-top: 6px;
   line-height: 1.5;
+  transform: translateZ(5px);
 }
 
 /* ── MAPA STILOVI ── */
@@ -312,6 +354,7 @@ body {
   border: 1px solid var(--border);
   display: block;
   text-decoration: none;
+  transform: translateZ(15px);
 }
 .map-wrap iframe {
   width: 100%;
@@ -347,15 +390,35 @@ body {
   transition: transform 0.3s ease;
   border-radius: 2px;
 }
-.map-wrap:hover .map-btn {
-  transform: translateY(0);
+.map-wrap:hover .map-btn { transform: translateY(0); }
+
+/* ── NAPOMENE I PRAVILA ── */
+.napomene {
+  max-width: 520px;
+  margin: 0 auto 40px;
+  text-align: center;
+  padding: 0 20px;
+}
+.pravilo-pice {
+  font-size: 16px;
+  color: var(--gold-hi);
+  font-weight: 600;
+  margin-bottom: 16px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.pravilo-poklon {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-style: italic;
 }
 
 /* ── RSVP ── */
 .rsvp-wrap {
   position: relative;
   z-index: 1;
-  padding: 60px 24px 100px;
+  padding: 20px 24px 100px;
 }
 
 .rsvp-box {
@@ -425,7 +488,6 @@ body {
   background-position: right 15px center;
   cursor: pointer;
 }
-
 .f-select option { background: var(--deep); color: var(--cream); }
 
 .send-btn {
@@ -446,14 +508,6 @@ body {
 .send-btn:hover { background: var(--gold-hi); transform: translateY(-2px); }
 .send-btn:active { transform: translateY(0); }
 .send-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
-
-/* ── Dodatni tekst ispod forme ── */
-.alt-rsvp-msg {
-  text-align: center;
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 24px;
-}
 
 /* ── SUCCESS ── */
 .success {
@@ -485,7 +539,6 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
   from { opacity: 0; transform: translateY(22px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -515,12 +568,16 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
 </head>
 <body>
 
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="pre-logo">XVIII</div>
+</div>
+
 <canvas id="bg"></canvas>
 
-<!-- ═══════════ HERO ═══════════ -->
+<!-- HERO -->
 <section class="hero">
   <p class="eyebrow">11 · Jul · 2026 &nbsp;—&nbsp; Restoran Pecić</p>
-
   <div class="big-18">18</div>
 
   <div class="gems">
@@ -529,8 +586,7 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
     <div class="gem"></div>
   </div>
 
-  <!-- Tvoja slika ubačena ovde -->
-  <img src="Jovan.jpg" alt="Jovan" class="hero-img">
+  <img src="jovan.jpg" alt="Jovan" class="hero-img">
 
   <p class="invite-label">Poziva Vas</p>
   <h1 class="hero-name">Jovan Miloševic</h1>
@@ -563,7 +619,7 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
   </div>
 </section>
 
-<!-- ═══════════ DETAILS ═══════════ -->
+<!-- DETAILS -->
 <section class="details">
   <div class="details-inner">
 
@@ -574,13 +630,11 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
     </div>
 
     <div class="cards">
-
       <div class="card reveal">
         <span class="card-icon">📍</span>
         <span class="card-label">Lokacija</span>
         <p class="card-value">Restoran Pecić</p>
         <p class="card-sub">Put za Malu Ivancu 1, Beograd 11232</p>
-        
         <a href="https://www.google.com/maps/search/?api=1&query=Restoran+Pećić,+Put+za+Malu+Ivancu+1,+Beograd" target="_blank" class="map-wrap">
           <iframe src="https://maps.google.com/maps?q=Restoran%20Pećić,%20Put%20za%20Malu%20Ivancu%201,%20Beograd&t=&z=14&ie=UTF8&iwloc=&output=embed" loading="lazy"></iframe>
           <div class="map-overlay">
@@ -602,21 +656,24 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
         <p class="card-value">Do 5. Jula</p>
         <p class="card-sub">Molimo Vas da potvrdite dolazak pre roka</p>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- ═══════════ RSVP ═══════════ -->
+<!-- RSVP -->
 <section class="rsvp-wrap">
-  <div class="rsvp-box reveal">
+  
+  <div class="napomene reveal">
+    <p class="pravilo-pice">Ako se ne napijete, računa se kao da niste ni dolazili! 😂</p>
+    <p class="pravilo-poklon">Najveći poklon je vaše prisustvo, ali ako želite da mi nešto poklonite, koverta uvek staje u džep. 😂</p>
+  </div>
 
+  <div class="rsvp-box reveal">
     <h2 class="rsvp-title">Potvrdite dolazak</h2>
     <p class="rsvp-deadline">⏳ &nbsp;Rok: 5. Jul 2026</p>
 
     <div id="form-wrap">
       <form id="rsvp" action="https://formspree.io/f/xpqekezb" method="POST">
-
         <div class="field">
           <label class="f-label" for="nm">Ime i prezime</label>
           <input class="f-input" id="nm" name="ime" type="text" placeholder="npr. Jovan Jovanovic" required>
@@ -632,7 +689,6 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
           </select>
         </div>
 
-        <!-- OVO JE KONTEJNER GDE SE POJAVLJUJU DODATNA POLJA -->
         <div id="dodatni-gosti"></div>
 
         <div class="field">
@@ -642,8 +698,6 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
 
         <button class="send-btn" type="submit" id="btn">Dolazim &nbsp;🥂</button>
       </form>
-
-      <p class="alt-rsvp-msg">Ako želite, možete potvrditi dolazak i porukom.</p>
     </div>
 
     <div class="success" id="ok">
@@ -651,7 +705,6 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
       <h3 class="success-h">Vidimo se!</h3>
       <p class="success-p">Hvala na potvrdi dolaska.<br>Jedva čekamo da proslavimo zajedno.</p>
     </div>
-
   </div>
 </section>
 
@@ -659,8 +712,32 @@ footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
   <p>Jovan Miloševic &nbsp;·&nbsp; XVIII Rodjendan &nbsp;·&nbsp; 11. Jul 2026</p>
 </footer>
 
-<!-- ═══════════ SCRIPTS ═══════════ -->
 <script>
+/* ── PRELOADER LOGIKA ── */
+window.addEventListener('load', () => {
+  const preloader = document.getElementById('preloader');
+  setTimeout(() => {
+    preloader.style.opacity = '0';
+    setTimeout(() => { preloader.remove(); }, 800);
+  }, 600);
+});
+
+/* ── ZLATNA PRAŠINA NA KURSOR / DODIR ── */
+function createSpark(x, y) {
+  const spark = document.createElement('div');
+  spark.className = 'spark';
+  spark.style.left = (x - 2) + 'px';
+  spark.style.top = (y - 2) + 'px';
+  document.body.appendChild(spark);
+  setTimeout(() => { spark.remove(); }, 800);
+}
+window.addEventListener('mousemove', (e) => {
+  if(Math.random() > 0.5) createSpark(e.clientX, e.clientY);
+});
+window.addEventListener('touchmove', (e) => {
+  if(Math.random() > 0.7) createSpark(e.touches[0].clientX, e.touches[0].clientY);
+}, { passive: true });
+
 /* ── STARFIELD CANVAS ── */
 const cv = document.getElementById('bg');
 const cx = cv.getContext('2d');
@@ -672,7 +749,6 @@ function resize() {
 resize();
 window.addEventListener('resize', resize);
 
-/* Static stars */
 const STARS = Array.from({ length: 130 }, () => ({
   x: Math.random(), y: Math.random(),
   r: Math.random() * 1.4 + 0.2,
@@ -682,21 +758,17 @@ const STARS = Array.from({ length: 130 }, () => ({
   vx: (Math.random() - .5) * .00006,
 }));
 
-/* Gold motes */
 const MOTES = Array.from({ length: 25 }, () => ({
   x: Math.random(), y: Math.random() * 1.2,
   r: Math.random() * 1.8 + .6,
-  a: 0,
+  a: Math.random() * .45 + .05,
   da: -.0015,
   vy: -(Math.random() * .0004 + .0001),
   vx: (Math.random() - .5) * .00012,
 }));
-MOTES.forEach(m => { m.a = Math.random() * .45 + .05; });
 
 function draw() {
   cx.clearRect(0, 0, cv.width, cv.height);
-
-  /* Radial glow at center-top */
   const g = cx.createRadialGradient(cv.width*.5, cv.height*.3, 0, cv.width*.5, cv.height*.3, cv.width*.55);
   g.addColorStop(0, 'rgba(18,10,45,.35)');
   g.addColorStop(1, 'rgba(6,6,15,0)');
@@ -710,7 +782,6 @@ function draw() {
     if (s.y > 1) { s.y = 0; s.x = Math.random(); }
     if (s.x < 0) s.x = 1;
     if (s.x > 1) s.x = 0;
-
     cx.beginPath();
     cx.arc(s.x * cv.width, s.y * cv.height, s.r, 0, Math.PI*2);
     cx.fillStyle = `rgba(243,235,216,${s.a})`;
@@ -765,20 +836,44 @@ const obs = new IntersectionObserver(
 );
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-/* ── DODATNA POLJA ZA GOSTE (DINAMIČNO) ── */
+/* ── 3D TILT EFEKAT ZA KARTICE ── */
+if (window.matchMedia("(hover: hover)").matches) {
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const cx = rect.width / 2;
+      const cy = rect.height / 2;
+      
+      const rotateX = ((y - cy) / cy) * -8; 
+      const rotateY = ((x - cx) / cx) * 8;
+      
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform 0.4s ease-out';
+      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+      setTimeout(() => { card.style.transition = 'transform 0.1s ease-out'; }, 400);
+    });
+  });
+}
+
+/* ── DODATNA POLJA ZA GOSTE ── */
 const brSelect = document.getElementById('br');
 const dodatniGosti = document.getElementById('dodatni-gosti');
 
 brSelect.addEventListener('change', (e) => {
   const broj = parseInt(e.target.value);
-  dodatniGosti.innerHTML = ''; // Brišemo prethodna polja svaki put kad se promeni odabir
+  dodatniGosti.innerHTML = ''; 
 
   if (broj > 1) {
     for (let i = 2; i <= broj; i++) {
       dodatniGosti.innerHTML += `
         <div class="field" style="animation: fade-in-up 0.4s ease forwards;">
           <label class="f-label" for="gost_${i}">Ime i prezime gosta ${i}</label>
-          <input class="f-input" id="gost_${i}" name="ime_gosta_${i}" type="text" placeholder="npr. Marko Marković" required>
+          <input class="f-input" id="gost_${i}" name="ime_gosta_${i}" type="text" placeholder="npr. Jovan Jovanovic" required>
         </div>
       `;
     }
