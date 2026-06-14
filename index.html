@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jovan Miloševic — XVIII</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --void:     #06060F;
+  --deep:     #0C0C1A;
+  --card:     #101022;
+  --border:   rgba(201,168,76,0.18);
+  --gold:     #C9A84C;
+  --gold-hi:  #FFE57A;
+  --gold-lo:  #6B5520;
+  --cream:    #F3EBD8;
+  --muted:    #6E6E85;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--void);
+  color: var(--cream);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── CANVAS ── */
+#bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 24px 80px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .45em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 36px;
+  opacity: 0;
+  animation: up .9s ease forwards .2s;
+}
+
+.big-18 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(140px, 28vw, 240px);
+  font-weight: 700;
+  line-height: .85;
+  background: linear-gradient(135deg,#6B5520 0%,#C9A84C 30%,#FFE57A 50%,#C9A84C 70%,#6B5520 100%);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 5s ease infinite, up .9s ease forwards .5s;
+  filter: drop-shadow(0 0 60px rgba(201,168,76,.25));
+  opacity: 0;
+}
+
+@keyframes shimmer {
+  0%,100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+.gems {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  justify-content: center;
+  margin: 18px 0 28px;
+  opacity: 0;
+  animation: up .9s ease forwards .8s;
+}
+
+.gem {
+  width: 7px; height: 7px;
+  background: var(--gold);
+  transform: rotate(45deg);
+}
+.gem.big { width: 11px; height: 11px; }
+
+.invite-label {
+  font-size: 10px;
+  letter-spacing: .4em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+  opacity: 0;
+  animation: up .9s ease forwards .9s;
+}
+
+.hero-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(34px, 6vw, 62px);
+  font-weight: 600;
+  letter-spacing: .06em;
+  color: var(--cream);
+  margin-bottom: 52px;
+  opacity: 0;
+  animation: up .9s ease forwards 1.05s;
+}
+
+/* ── COUNTDOWN ── */
+.countdown {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 64px;
+  opacity: 0;
+  animation: up .9s ease forwards 1.25s;
+}
+
+.cd-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.cd-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(42px, 8vw, 68px);
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+  min-width: 68px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.cd-label {
+  font-size: 8px;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.cd-colon {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 50px;
+  color: var(--gold-lo);
+  line-height: 1.2;
+  padding-top: 0px;
+  user-select: none;
+}
+
+/* ── SCROLL HINT ── */
+.scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  animation: up .9s ease forwards 1.6s;
+}
+
+.scroll-hint span {
+  font-size: 9px;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.scroll-bar {
+  width: 1px;
+  height: 44px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: barPulse 2.2s ease infinite;
+}
+
+@keyframes barPulse {
+  0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+  50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+  51%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+
+/* ── DIVIDER ── */
+.rule {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 56px;
+}
+.rule-line { flex: 1; height: 1px; background: var(--border); }
+.rule-gem  { width: 7px; height: 7px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
+
+/* ── DETAILS SECTION ── */
+.details {
+  position: relative;
+  z-index: 1;
+  padding: 80px 24px 40px;
+}
+
+.details-inner {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.cards > .card:first-child {
+  grid-column: 1 / -1;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 30px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .3s;
+}
+
+.card:hover {
+  border-color: rgba(201,168,76,.4);
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 30px; right: 30px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.card:hover::after { opacity: 1; }
+
+.card-icon {
+  font-size: 22px;
+  display: block;
+  margin-bottom: 14px;
+}
+
+.card-label {
+  font-size: 9px;
+  letter-spacing: .4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.card-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(20px, 2.8vw, 26px);
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.25;
+}
+
+.card-sub {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* ── MAPA STILOVI ── */
+.map-wrap {
+  position: relative;
+  margin-top: 20px;
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  display: block;
+  text-decoration: none;
+}
+.map-wrap iframe {
+  width: 100%;
+  height: 160px;
+  display: block;
+  border: none;
+  pointer-events: none; /* Sprečava da mapa "krade" skrol, klik ide na link */
+}
+.map-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 6, 15, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+.map-wrap:hover .map-overlay {
+  opacity: 1;
+  background: rgba(6, 6, 15, 0.65);
+}
+.map-btn {
+  background: var(--gold);
+  color: #060610;
+  padding: 10px 18px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  transform: translateY(10px);
+  transition: transform 0.3s ease;
+  border-radius: 2px;
+}
+.map-wrap:hover .map-btn {
+  transform: translateY(0);
+}
+
+/* ── RSVP ── */
+.rsvp-wrap {
+  position: relative;
+  z-index: 1;
+  padding: 60px 24px 100px;
+}
+
+.rsvp-box {
+  max-width: 520px;
+  margin: 0 auto;
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 48px 40px;
+  position: relative;
+}
+
+.rsvp-box::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: 50px; right: 50px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.rsvp-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 6px;
+}
+
+.rsvp-deadline {
+  font-size: 11px;
+  letter-spacing: .1em;
+  color: var(--gold);
+  margin-bottom: 36px;
+}
+
+.field { margin-bottom: 20px; }
+
+.f-label {
+  display: block;
+  font-size: 9px;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.f-input, .f-select {
+  width: 100%;
+  background: rgba(255,255,255,.035);
+  border: 1px solid var(--border);
+  color: var(--cream);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  padding: 13px 15px;
+  outline: none;
+  transition: border-color .2s;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
+.f-input::placeholder { color: var(--muted); }
+.f-input:focus, .f-select:focus { border-color: var(--gold); }
+
+.f-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A84C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  cursor: pointer;
+}
+
+.f-select option { background: var(--deep); color: var(--cream); }
+
+.send-btn {
+  width: 100%;
+  background: var(--gold);
+  color: #060610;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  padding: 18px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background .2s, transform .15s;
+}
+.send-btn:hover { background: var(--gold-hi); transform: translateY(-2px); }
+.send-btn:active { transform: translateY(0); }
+.send-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+
+/* ── SUCCESS ── */
+.success {
+  display: none;
+  text-align: center;
+  padding: 10px 0;
+}
+.success-icon { font-size: 52px; margin-bottom: 18px; }
+.success-h {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.success-p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+/* ── FOOTER ── */
+footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 36px 20px;
+  border-top: 1px solid var(--border);
+}
+footer p { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
+
+/* ── ANIMATIONS ── */
+@keyframes up {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .75s ease, transform .75s ease;
+}
+.reveal.on { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 580px) {
+  .cards { grid-template-columns: 1fr; }
+  .cards > .card:first-child { grid-column: 1; }
+  .rsvp-box { padding: 36px 22px; }
+  .countdown { gap: 10px; }
+  .cd-num { min-width: 52px; }
+  .cd-colon { font-size: 38px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<section class="hero">
+  <p class="eyebrow">11 · Juli · 2026 &nbsp;—&nbsp; Restoran Pećić</p>
+
+  <div class="big-18">18</div>
+
+  <div class="gems">
+    <div class="gem"></div>
+    <div class="gem big"></div>
+    <div class="gem"></div>
+  </div>
+
+  <p class="invite-label">Poziva Vas</p>
+  <h1 class="hero-name">Jovan Miloševic</h1>
+
+  <div class="countdown">
+    <div class="cd-block">
+      <span class="cd-num" id="d">00</span>
+      <span class="cd-label">Dana</span>
+    </div>
+    <span class="cd-colon">:</span>
+    <div class="cd-block">
+      <span class="cd-num" id="h">00</span>
+      <span class="cd-label">Sati</span>
+    </div>
+    <span class="cd-colon">:</span>
+    <div class="cd-block">
+      <span class="cd-num" id="m">00</span>
+      <span class="cd-label">Minuta</span>
+    </div>
+    <span class="cd-colon">:</span>
+    <div class="cd-block">
+      <span class="cd-num" id="s">00</span>
+      <span class="cd-label">Sekundi</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Detalji</span>
+    <div class="scroll-bar"></div>
+  </div>
+</section>
+
+<section class="details">
+  <div class="details-inner">
+
+    <div class="rule reveal">
+      <div class="rule-line"></div>
+      <div class="rule-gem"></div>
+      <div class="rule-line"></div>
+    </div>
+
+    <div class="cards">
+
+      <div class="card reveal">
+        <span class="card-icon">📍</span>
+        <span class="card-label">Lokacija</span>
+        <p class="card-value">Restoran Pećić</p>
+        <p class="card-sub">Put za Malu Ivancu 1, Beograd 11232</p>
+        
+        <a href="https://www.google.com/maps/search/?api=1&query=Restoran+Pećić,+Put+za+Malu+Ivancu+1,+Beograd" target="_blank" class="map-wrap">
+          <iframe src="https://maps.google.com/maps?q=Restoran%20Pećić,%20Put%20za%20Malu%20Ivancu%201,%20Beograd&t=&z=14&ie=UTF8&iwloc=&output=embed" loading="lazy"></iframe>
+          <div class="map-overlay">
+            <span class="map-btn">Otvori na mapi</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="card reveal" style="transition-delay:.1s">
+        <span class="card-icon">📅</span>
+        <span class="card-label">Datum</span>
+        <p class="card-value">11. Juli 2026</p>
+        <p class="card-sub">Subota uveče</p>
+      </div>
+
+      <div class="card reveal" style="transition-delay:.2s">
+        <span class="card-icon">✉️</span>
+        <span class="card-label">Potvrda dolaska</span>
+        <p class="card-value">Do 5. Jula</p>
+        <p class="card-sub">Molimo Vas da potvrdite dolazak pre roka</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="rsvp-wrap">
+  <div class="rsvp-box reveal">
+
+    <h2 class="rsvp-title">Potvrdite dolazak</h2>
+    <p class="rsvp-deadline">⏳ &nbsp;Rok: 5. Juli 2026</p>
+
+    <div id="form-wrap">
+      <form id="rsvp" action="https://formspree.io/f/xpqekezb" method="POST">
+
+        <div class="field">
+          <label class="f-label" for="nm">Ime i prezime</label>
+          <input class="f-input" id="nm" name="ime" type="text" placeholder="npr. Marko Marković" required>
+        </div>
+
+        <div class="field">
+          <label class="f-label" for="em">Email (opciono — za potvrdu)</label>
+          <input class="f-input" id="em" name="email" type="email" placeholder="vas@email.com">
+        </div>
+
+        <div class="field">
+          <label class="f-label" for="br">Broj gostiju</label>
+          <select class="f-input f-select" id="br" name="broj_gostiju">
+            <option value="1">Samo ja</option>
+            <option value="2">Nas dvoje</option>
+            <option value="3">Nas troje</option>
+            <option value="4+">Nas cetvorice ili više</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="f-label" for="msg">Poruka za Jovana (opciono)</label>
+          <input class="f-input" id="msg" name="poruka" type="text" placeholder="Jedva čekam, brate! 🎉">
+        </div>
+
+        <button class="send-btn" type="submit" id="btn">Dolazim &nbsp;🥂</button>
+      </form>
+    </div>
+
+    <div class="success" id="ok">
+      <div class="success-icon">🎊</div>
+      <h3 class="success-h">Vidimo se!</h3>
+      <p class="success-p">Hvala na potvrdi dolaska.<br>Jedva čekamo da proslavimo zajedno.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <p>Jovan Miloševic &nbsp;·&nbsp; XVIII Rodjendan &nbsp;·&nbsp; 11. Juli 2026</p>
+</footer>
+
+<script>
+/* ── STARFIELD CANVAS ── */
+const cv = document.getElementById('bg');
+const cx = cv.getContext('2d');
+
+function resize() {
+  cv.width  = window.innerWidth;
+  cv.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+/* Static stars */
+const STARS = Array.from({ length: 130 }, () => ({
+  x: Math.random(), y: Math.random(),
+  r: Math.random() * 1.4 + 0.2,
+  a: Math.random(),
+  da: (Math.random() - .5) * .008,
+  vy: Math.random() * .00018 + .00004,
+  vx: (Math.random() - .5) * .00006,
+}));
+
+/* Gold motes */
+const MOTES = Array.from({ length: 25 }, () => ({
+  x: Math.random(), y: Math.random() * 1.2,
+  r: Math.random() * 1.8 + .6,
+  a: 0,
+  da: -.0015,
+  vy: -(Math.random() * .0004 + .0001),
+  vx: (Math.random() - .5) * .00012,
+}));
+MOTES.forEach(m => { m.a = Math.random() * .45 + .05; });
+
+function draw() {
+  cx.clearRect(0, 0, cv.width, cv.height);
+
+  /* Radial glow at center-top */
+  const g = cx.createRadialGradient(cv.width*.5, cv.height*.3, 0, cv.width*.5, cv.height*.3, cv.width*.55);
+  g.addColorStop(0, 'rgba(18,10,45,.35)');
+  g.addColorStop(1, 'rgba(6,6,15,0)');
+  cx.fillStyle = g;
+  cx.fillRect(0, 0, cv.width, cv.height);
+
+  STARS.forEach(s => {
+    s.a += s.da;
+    if (s.a > 1 || s.a < .05) s.da *= -1;
+    s.x += s.vx; s.y += s.vy;
+    if (s.y > 1) { s.y = 0; s.x = Math.random(); }
+    if (s.x < 0) s.x = 1;
+    if (s.x > 1) s.x = 0;
+
+    cx.beginPath();
+    cx.arc(s.x * cv.width, s.y * cv.height, s.r, 0, Math.PI*2);
+    cx.fillStyle = `rgba(243,235,216,${s.a})`;
+    cx.fill();
+  });
+
+  MOTES.forEach(m => {
+    m.x += m.vx; m.y += m.vy; m.a += m.da;
+    if (m.a <= 0) {
+      m.x = Math.random(); m.y = 1.05;
+      m.a = Math.random() * .45 + .05;
+      m.da = -.0015;
+      m.vy = -(Math.random() * .0004 + .0001);
+    }
+    cx.beginPath();
+    cx.arc(m.x * cv.width, m.y * cv.height, m.r, 0, Math.PI*2);
+    cx.fillStyle = `rgba(201,168,76,${m.a})`;
+    cx.fill();
+  });
+
+  requestAnimationFrame(draw);
+}
+draw();
+
+/* ── COUNTDOWN ── */
+const TARGET = new Date('2026-07-11T20:00:00');
+const pad = n => String(n).padStart(2,'0');
+
+function tick() {
+  const diff = TARGET - Date.now();
+  if (diff <= 0) {
+    document.querySelector('.countdown').innerHTML =
+      '<p style="font-family:\'Cormorant Garamond\',serif;font-size:28px;color:#C9A84C">🎉 Veče je!</p>';
+    return;
+  }
+  const td = Math.floor(diff / 86400000);
+  const th = Math.floor(diff % 86400000 / 3600000);
+  const tm = Math.floor(diff % 3600000 / 60000);
+  const ts = Math.floor(diff % 60000 / 1000);
+  document.getElementById('d').textContent = pad(td);
+  document.getElementById('h').textContent = pad(th);
+  document.getElementById('m').textContent = pad(tm);
+  document.getElementById('s').textContent = pad(ts);
+}
+tick();
+setInterval(tick, 1000);
+
+/* ── SCROLL REVEAL ── */
+const obs = new IntersectionObserver(
+  entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); }),
+  { threshold: .12 }
+);
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ── RSVP SUBMIT ── */
+const form = document.getElementById('rsvp');
+const btn  = document.getElementById('btn');
+const wrap = document.getElementById('form-wrap');
+const ok   = document.getElementById('ok');
+
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  btn.disabled = true;
+  btn.textContent = 'Šaljem...';
+
+  const data = new FormData(form);
+  try {
+    const res = await fetch(form.action, {
+      method: 'POST',
+      body: data,
+      headers: { Accept: 'application/json' }
+    });
+    if (res.ok) {
+      wrap.style.display = 'none';
+      ok.style.display = 'block';
+      burst();
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Greška — pokušaj ponovo';
+    }
+  } catch {
+    btn.disabled = false;
+    btn.textContent = 'Greška — pokušaj ponovo';
+  }
+});
+
+/* ── CONFETTI BURST ── */
+function burst() {
+  const cols = ['#C9A84C','#FFE57A','#F3EBD8','#8B6E2A','#ffffff'];
+  for (let i = 0; i < 70; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      const size = Math.random() * 9 + 4;
+      el.style.cssText = `
+        position:fixed;
+        left:${Math.random()*100}vw;
+        top:-12px;
+        width:${size}px;
+        height:${size}px;
+        background:${cols[Math.floor(Math.random()*cols.length)]};
+        border-radius:${Math.random()>.5?'50%':'2px'};
+        pointer-events:none;
+        z-index:9999;
+        animation:fall ${Math.random()*2+1.8}s ease forwards;
+      `;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }, i * 28);
+  }
+}
+
+const ks = document.createElement('style');
+ks.textContent = '@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(105vh) rotate(800deg);opacity:0}}';
+document.head.appendChild(ks);
+</script>
+</body>
+</html>
